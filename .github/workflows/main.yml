@@ -25,7 +25,7 @@ jobs:
       - name: Prepare web files
         run: |
           mkdir -p www
-          cp index.html www/
+          cp index.html SolaimanLipi.ttf www/
 
       - name: Add Android platform
         run: npx cap add android
