@@ -1,98 +1,61 @@
-<!DOCTYPE html>
-<html lang="bn"><head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>বয়ান সংরক্ষণ</title>
-<style>
-@font-face{font-family:S;src:url(SolaimanLipi.ttf)}
-:root{--bg:#f5f0e6;--c:#fff;--t:#222;--g:#1e5f20;--s:#5a6b7b;--h:#1e5f20}
-body.n{--bg:#121212;--c:#1e1e1e;--t:#e8e8e8;--g:#7bc47f;--s:#aaa;--h:#0f2f10}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--t);font-family:S,'Noto Sans Bengali',sans-serif}
-.p{display:none;min-height:100vh;padding-bottom:90px}
-.on{display:block}
-header{background:var(--h);color:#fff;padding:16px;text-align:center;border-radius:0 0 30px 30px;position:relative}
-.bis{color:#f5d76e;font-size:26px;margin:4px 0 6px;font-family:'Amiri','Traditional Arabic',serif}
-h1{margin:0 0 4px;font-size:34px}
-.sub{font-size:18px;margin-bottom:12px;opacity:.9}
-.moon{position:absolute;top:8px;right:10px;width:40px;height:40px;border:0;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;font-size:20px}
-input,textarea{width:100%;padding:12px;border:1px solid #ccc;border-radius:24px;font:inherit;font-size:18px;background:var(--c);color:var(--t)}
-textarea{border-radius:12px}
-.bar{display:flex;gap:6px;padding:8px;background:var(--h)}
-.bar button{flex:1;padding:10px 2px;border:0;border-radius:10px;background:#fff;color:#1e5f20;font:inherit;font-size:16px}
-.card{background:var(--c);margin:10px 14px;padding:14px;border-radius:14px;border-right:6px solid #c9a227}
-.card b{color:var(--g);font-size:20px}
-.card p{color:var(--s);margin:6px 0}
-.card small{color:#888}
-.box{background:var(--c);margin:10px 14px;padding:14px;border-radius:14px;white-space:pre-wrap;line-height:1.9}
-#add{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#c9a227;color:#fff;border:0;border-radius:30px;padding:14px 28px;font:inherit;font-size:20px}
-.pad{padding:14px}
-.pad>*{margin-bottom:10px}
-.r{background:#c62828!important;color:#fff!important}
-</style></head><body>
-
-<div id="l" class="p on">
-<header>
-<button class="moon" onclick="N()">☾</button>
-<div class="bis">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
-<h1>বয়ান সংরক্ষণ</h1>
-<div class="sub">আপনার বয়ানের ব্যক্তিগত সংগ্রহ</div>
-<input id="q" placeholder="বয়ান খুঁজুন..." oninput="L()"></header>
-<div style="padding:8px 14px" id="cnt"></div>
-<div id="list"></div>
-<button id="add" onclick="E(-1)">+ নতুন বয়ান</button>
-</div>
-
-<div id="v" class="p">
-<div class="bar">
-<button onclick="go('l')">‹</button>
-<button onclick="F(-2)">অ-</button>
-<button onclick="F(2)">অ+</button>
-<button onclick="E(cur)">সম্পাদনা</button>
-<button onclick="N()">☾</button></div>
-<div class="box" style="color:var(--g);font-size:22px" id="vt"></div>
-<div class="box" id="vx"></div>
-</div>
-
-<div id="e" class="p">
-<div class="bar"><button onclick="go('l')">‹</button></div>
-<div class="pad">
-<input id="et" placeholder="শিরোনাম">
-<textarea id="ex" rows="14" placeholder="বয়ান লিখুন..."></textarea>
-<button class="card" style="width:100%;border:0;font:inherit;font-size:18px" onclick="S()">সংরক্ষণ</button>
-<button id="dl" class="card r" style="width:100%;border:0;font:inherit;font-size:18px" onclick="X()">মুছুন</button>
-</div></div>
-
+<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light">
+<style>html{color-scheme:light}body{font-family:sans-serif;margin:10px;background:#fff;color:#000}textarea,input,select{background:#fff;color:#000;border:1px solid #888;box-sizing:border-box}textarea{width:100%;height:150px;font-size:16px}button,select{padding:10px;margin:4px 0;font-size:16px;width:100%;background:#eee;color:#000;border:1px solid #888}.i{border:1px solid #ccc;padding:6px;margin:4px 0}.tb{width:49%;background:#ddd}</style></head><body>
+<h3>পিডিএফ বানান</h3>
+<button class="tb" onclick="tab(1)">লেখা থেকে PDF</button><button class="tb" onclick="tab(2)">ছবি থেকে PDF</button>
+<input id="n" placeholder="ফাইলের নাম" style="width:100%;font-size:16px;padding:6px">
+<div id="b1"><textarea id="t" placeholder="বাংলা/আরবি লেখা পেস্ট করুন"></textarea>
+<button onclick="addT()">আরও লেখা যোগ করুন (নতুন অধ্যায়)</button></div>
+<div id="b2" style="display:none"><input type="file" id="f" accept="image/*" multiple hidden onchange="addI(this.files)">
+<button onclick="f.click()">ছবি যোগ করুন</button>
+<select id="m"><option value="b">সাদা-কালো (সবচেয়ে ছোট সাইজ)</option><option value="c">রঙিন</option></select>
+<select id="mo"><option value="i">পাতা = ছবির মাপ</option><option value="a">সব পাতা A4</option></select></div>
+<div id="l"></div>
+<button id="b" onclick="mk()" style="background:#0a7;color:#fff">PDF বানান</button>
 <script>
-let D=JSON.parse(localStorage.b||'[]'),cur=-1,fs=+localStorage.f||22;
-if(localStorage.n=='1')document.body.classList.add('n');
-const $=i=>document.getElementById(i);
-const bn=n=>String(n).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
-const sv=()=>localStorage.b=JSON.stringify(D);
-function go(id){document.querySelectorAll('.p').forEach(p=>p.classList.remove('on'));$(id).classList.add('on');if(id=='l')L()}
-function N(){document.body.classList.toggle('n');localStorage.n=document.body.classList.contains('n')?'1':'0'}
-function L(){
- let q=$('q').value.trim(),h=$('list');h.innerHTML='';
- $('cnt').textContent='মোট বয়ান: '+bn(D.length);
- D.forEach((b,i)=>{
-  if(q&&!(b.t+b.x).includes(q))return;
-  let c=document.createElement('div');c.className='card';c.onclick=()=>O(i);
-  let t=document.createElement('b');t.textContent=b.t;
-  let p=document.createElement('p');p.textContent=b.x.slice(0,80);
-  let s=document.createElement('small');s.textContent=b.d;
-  c.append(t,p,s);h.append(c);
- });
-}
-function O(i){cur=i;$('vt').textContent=D[i].t;$('vx').textContent=D[i].x;$('vx').style.fontSize=fs+'px';go('v')}
-function F(n){fs=Math.max(14,Math.min(50,fs+n));localStorage.f=fs;$('vx').style.fontSize=fs+'px'}
-function E(i){cur=i;$('et').value=i<0?'':D[i].t;$('ex').value=i<0?'':D[i].x;$('dl').style.display=i<0?'none':'block';go('e')}
-function S(){
- let t=$('et').value.trim(),x=$('ex').value.trim();
- if(!t&&!x)return;
- let d=new Date(),ds=bn(d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear());
- if(cur<0)D.unshift({t,x,d:ds});else{D[cur].t=t;D[cur].x=x}
- sv();go('l')
-}
-function X(){if(confirm('এই বয়ানটি মুছে ফেলবেন?')){D.splice(cur,1);sv();go('l')}}
-L();
+const W=1000,H=1414;let L=[];
+function tab(k){b1.style.display=k==1?'':'none';b2.style.display=k==2?'':'none';L=[];show()}
+function show(){l.innerHTML=L.map((x,i)=>`<div class=i>${i+1}. ${x.t?x.t.slice(0,40):'ছবি'} <a href="#" onclick="L.splice(${i},1);show()">❌</a></div>`).join('')}
+function addT(){if(t.value.trim()){L.push({t:t.value});t.value='';show()}}
+async function addI(fs){for(let x of [...fs]){await new Promise(o=>{let r=new FileReader();r.onload=()=>{L.push({s:r.result});show();o()};r.readAsDataURL(x)})}f.value=''}
+function bits(c){let w=c.width,h=c.height,d=c.getContext('2d').getImageData(0,0,w,h).data,r=(w+7)>>3,o=new Uint8Array(r*h);
+for(let y=0;y<h;y++)for(let x=0;x<w;x++)if(d[(y*w+x)*4+1]>160)o[y*r+(x>>3)]|=128>>(x&7);return o}
+async function dfl(u){return new Uint8Array(await new Response(new Blob([u]).stream().pipeThrough(new CompressionStream('deflate'))).arrayBuffer())}
+function tp(txt){let P=[],c,g,y,rt;
+function fin(){if(c)P.push({d:bits(c),w:W,h:H,pw:595,ph:842})}
+function nw(){fin();c=document.createElement('canvas');c.width=W;c.height=H;g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,W,H);g.fillStyle='#000';g.font='30px sans-serif';y=80}
+function out(s){if(y>H-70)nw();g.direction=rt?'rtl':'ltr';g.textAlign=rt?'right':'left';g.fillText(s,rt?W-70:70,y);y+=50}
+nw();
+for(let p of txt.split('\n')){rt=/[\u0600-\u06FF]/.test(p);g.direction=rt?'rtl':'ltr';let ln='';for(let s of p.split(' ')){let zz=ln+s+' ';if(g.measureText(zz).width>W-140){out(ln);ln=s+' '}else ln=zz}out(ln)}
+fin();return P}
+function ip(src){return new Promise(r=>{let im=new Image();im.onload=()=>{let a4=mo.value=='a',k=Math.min(1,1000/im.width),cw=a4?W:Math.round(im.width*k),ch=a4?H:Math.round(im.height*k),c=document.createElement('canvas'),g;
+c.width=cw;c.height=ch;g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,cw,ch);
+let s=Math.min(cw/im.width,ch/im.height);g.drawImage(im,(cw-im.width*s)/2,(ch-im.height*s)/2,im.width*s,im.height*s);
+let p={w:cw,h:ch,pw:595,ph:a4?842:Math.round(595*ch/cw)};
+if(m.value=='b')p.d=bits(c);else{p.j=1;p.d=Uint8Array.from(atob(c.toDataURL('image/jpeg',.6).split(',')[1]),x=>x.charCodeAt(0))}
+r(p)};im.src=src})}
+function pdf(P){let A=[],pos=0,off=[],en=new TextEncoder();
+const add=x=>{if(typeof x=='string')x=en.encode(x);A.push(x);pos+=x.length};
+const ob=(i,s,bin)=>{off[i]=pos;add(i+' 0 obj\n'+s);if(bin){add('stream\n');add(bin);add('\nendstream')}add('\nendobj\n')};
+add('%PDF-1.4\n');
+ob(1,'<</Type/Catalog/Pages 2 0 R>>');
+ob(2,`<</Type/Pages/Count ${P.length}/Kids[${P.map((_,k)=>(3+3*k)+' 0 R').join(' ')}]>>`);
+P.forEach((p,k)=>{let a=3+3*k,cn=`q ${p.pw} 0 0 ${p.ph} 0 0 cm /I Do Q`;
+ob(a,`<</Type/Page/Parent 2 0 R/MediaBox[0 0 ${p.pw} ${p.ph}]/Contents ${a+1} 0 R/Resources<</XObject<</I ${a+2} 0 R>>>>>>`);
+ob(a+1,`<</Length ${cn.length}>>\n`,en.encode(cn));
+ob(a+2,`<</Type/XObject/Subtype/Image/Width ${p.w}/Height ${p.h}/ColorSpace/${p.j?'DeviceRGB':'DeviceGray'}/BitsPerComponent ${p.j?8:1}/Filter/${p.j?'DCTDecode':'FlateDecode'}/Length ${p.d.length}>>\n`,p.d)});
+let xp=pos,n=3*P.length+3;
+add('xref\n0 '+n+'\n0000000000 65535 f \n');
+for(let i=1;i<n;i++)add(String(off[i]).padStart(10,'0')+' 00000 n \n');
+add(`trailer\n<</Size ${n}/Root 1 0 R>>\nstartxref\n${xp}\n%%EOF`);
+return new Blob(A,{type:'application/pdf'})}
+async function mk(){if(b1.style.display!='none'&&t.value.trim())addT();
+if(!L.length)return alert('আগে কিছু যোগ করুন');
+if(!window.CompressionStream)return alert('Android System WebView আপডেট করুন');
+b.disabled=true;b.textContent='অপেক্ষা করুন...';
+let P=[];for(let x of L){if(x.t)P.push(...tp(x.t));else P.push(await ip(x.s))}
+for(let p of P)if(!p.j)p.d=await dfl(p.d);
+let bl=pdf(P),nm=(n.value||'book')+'.pdf',r=new FileReader();
+r.onload=async()=>{try{await Capacitor.Plugins.Filesystem.writeFile({path:'PDF/'+nm,data:r.result.split(',')[1],directory:'DOCUMENTS',recursive:true});alert('Documents/PDF ফোল্ডারে সেভ হয়েছে ('+Math.round(bl.size/1024)+' KB)')}catch(e){let a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download=nm;a.click()}
+b.disabled=false;b.textContent='PDF বানান'};
+r.readAsDataURL(bl)}
 </script></body></html>
