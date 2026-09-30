@@ -1,216 +1,98 @@
 <!DOCTYPE html>
-<html lang="bn">
-<head>
+<html lang="bn"><head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>বয়ান সংরক্ষণ</title>
-<style>@font-face{font-family:'Solaiman';src:url('SolaimanLipi.ttf');}
-body,button,input,select,textarea{font-family:'Solaiman',sans-serif !important;}
-:root{--bg:#f4f6f5;--card:#fff;--tx:#1d2b26;--sub:#66756f;--pri:#0f7a5c;--bd:#dfe6e3;--dn:#c0392b}
-body.dark{--bg:#121816;--card:#1b2420;--tx:#e6efeb;--sub:#9db0a8;--pri:#3fbf98;--bd:#2b3833;--dn:#e57368}
+<style>
+@font-face{font-family:S;src:url(SolaimanLipi.ttf)}
+:root{--bg:#f5f0e6;--c:#fff;--t:#222;--g:#1e5f20;--s:#5a6b7b;--h:#1e5f20}
+body.n{--bg:#121212;--c:#1e1e1e;--t:#e8e8e8;--g:#7bc47f;--s:#aaa;--h:#0f2f10}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,sans-serif;padding-bottom:90px}
-header{position:sticky;top:0;z-index:5;background:var(--pri);color:#fff;padding:12px 14px;display:flex;align-items:center;gap:8px}
-header h1{font-size:19px;margin:0;flex:1}
-button,select,input,textarea{font:inherit;color:inherit}
-.ib{background:rgba(255,255,255,.2);border:0;color:#fff;border-radius:8px;padding:7px 11px;font-size:15px}
-main{padding:12px;max-width:760px;margin:auto}
-.bar{display:flex;gap:8px;margin-bottom:10px}
-.bar input,.bar select,.f input,.f textarea,.f select,#bk{width:100%;background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:10px}
-.bar select{width:40%}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px 14px;margin-bottom:10px}
-.card h3{margin:0 0 4px;font-size:17px}
-.meta{color:var(--sub);font-size:13px}
-.snip{margin-top:6px;font-size:14px;color:var(--sub);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.tag{display:inline-block;background:var(--pri);color:#fff;border-radius:20px;padding:1px 9px;font-size:12px;margin-right:6px}
-.fab{position:fixed;right:18px;bottom:calc(20px + env(safe-area-inset-bottom,0px));width:58px;height:58px;border-radius:50%;border:0;background:var(--pri);color:#fff;font-size:32px;box-shadow:0 3px 10px rgba(0,0,0,.3)}
-.btn{background:var(--pri);color:#fff;border:0;border-radius:10px;padding:10px 14px;margin:4px 4px 4px 0}
-.btn.g{background:var(--card);color:var(--tx);border:1px solid var(--bd)}
-.btn.d{background:var(--dn)}
-.f label{display:block;margin:10px 0 4px;font-size:14px;color:var(--sub)}
-.f textarea{min-height:260px;line-height:1.7}
-#rt{white-space:pre-wrap;line-height:1.9;margin-top:14px}
-.v{display:none}.v.on{display:block}
-.empty{text-align:center;color:var(--sub);margin-top:50px}
-</style>
-</head>
-<body>
+body{margin:0;background:var(--bg);color:var(--t);font-family:S,'Noto Sans Bengali',sans-serif}
+.p{display:none;min-height:100vh;padding-bottom:90px}
+.on{display:block}
+header{background:var(--h);color:#fff;padding:16px;text-align:center;border-radius:0 0 30px 30px;position:relative}
+.bis{color:#f5d76e;font-size:26px;margin:4px 0 6px;font-family:'Amiri','Traditional Arabic',serif}
+h1{margin:0 0 4px;font-size:34px}
+.sub{font-size:18px;margin-bottom:12px;opacity:.9}
+.moon{position:absolute;top:8px;right:10px;width:40px;height:40px;border:0;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;font-size:20px}
+input,textarea{width:100%;padding:12px;border:1px solid #ccc;border-radius:24px;font:inherit;font-size:18px;background:var(--c);color:var(--t)}
+textarea{border-radius:12px}
+.bar{display:flex;gap:6px;padding:8px;background:var(--h)}
+.bar button{flex:1;padding:10px 2px;border:0;border-radius:10px;background:#fff;color:#1e5f20;font:inherit;font-size:16px}
+.card{background:var(--c);margin:10px 14px;padding:14px;border-radius:14px;border-right:6px solid #c9a227}
+.card b{color:var(--g);font-size:20px}
+.card p{color:var(--s);margin:6px 0}
+.card small{color:#888}
+.box{background:var(--c);margin:10px 14px;padding:14px;border-radius:14px;white-space:pre-wrap;line-height:1.9}
+#add{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#c9a227;color:#fff;border:0;border-radius:30px;padding:14px 28px;font:inherit;font-size:20px}
+.pad{padding:14px}
+.pad>*{margin-bottom:10px}
+.r{background:#c62828!important;color:#fff!important}
+</style></head><body>
+
+<div id="l" class="p on">
 <header>
-  <h1 id="ht">বয়ান সংরক্ষণ</h1>
-  <button class="ib" id="bBack" style="display:none">← ফিরুন</button>
-  <button class="ib" id="bDark">🌙</button>
-  <button class="ib" id="bBk">ব্যাকআপ</button>
-</header>
-<main>
-  <section id="vList" class="v on">
-    <div class="bar">
-      <input id="q" type="search" placeholder="খুঁজুন (শিরোনাম, বক্তা, লেখা)">
-      <select id="cf"></select>
-    </div>
-    <div id="cnt" class="meta" style="margin-bottom:8px"></div>
-    <div id="list"></div>
-  </section>
+<button class="moon" onclick="N()">☾</button>
+<div class="bis">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
+<h1>বয়ান সংরক্ষণ</h1>
+<div class="sub">আপনার বয়ানের ব্যক্তিগত সংগ্রহ</div>
+<input id="q" placeholder="বয়ান খুঁজুন..." oninput="L()"></header>
+<div style="padding:8px 14px" id="cnt"></div>
+<div id="list"></div>
+<button id="add" onclick="E(-1)">+ নতুন বয়ান</button>
+</div>
 
-  <section id="vForm" class="v f">
-    <label>শিরোনাম *</label><input id="fT">
-    <label>বক্তা / উৎস</label><input id="fS">
-    <label>তারিখ</label><input id="fD" type="date">
-    <label>বিষয় (যেমন: ঈমান, নামাজ, আখলাক)</label><input id="fC">
-    <label>বয়ানের লেখা</label><textarea id="fX"></textarea>
-    <div style="margin-top:12px">
-      <button class="btn" id="bSave">সংরক্ষণ করুন</button>
-      <button class="btn g" id="bCancel">বাতিল</button>
-    </div>
-  </section>
+<div id="v" class="p">
+<div class="bar">
+<button onclick="go('l')">‹</button>
+<button onclick="F(-2)">অ-</button>
+<button onclick="F(2)">অ+</button>
+<button onclick="E(cur)">সম্পাদনা</button>
+<button onclick="N()">☾</button></div>
+<div class="box" style="color:var(--g);font-size:22px" id="vt"></div>
+<div class="box" id="vx"></div>
+</div>
 
-  <section id="vRead" class="v">
-    <h2 id="rT" style="margin:4px 0"></h2>
-    <div id="rM" class="meta"></div>
-    <div style="margin-top:10px">
-      <button class="btn g" id="bPlus">A+</button>
-      <button class="btn g" id="bMinus">A−</button>
-      <button class="btn g" id="bCopy">কপি</button>
-      <button class="btn g" id="bShare">শেয়ার</button>
-      <button class="btn" id="bEdit">সম্পাদনা</button>
-      <button class="btn d" id="bDel">মুছুন</button>
-    </div>
-    <div id="rt"></div>
-  </section>
-
-  <section id="vBk" class="v">
-    <p class="meta">সব বয়ান এই ফোনেই সংরক্ষিত থাকে। অ্যাপ আনইনস্টল বা Clear data করলে মুছে যায়, তাই নিয়মিত ব্যাকআপ রাখুন।</p>
-    <button class="btn" id="bMake">ব্যাকআপ তৈরি করুন</button>
-    <button class="btn g" id="bCpB">কপি</button>
-    <button class="btn g" id="bDl">ফাইল ডাউনলোড</button>
-    <textarea id="bk" rows="10" placeholder="ব্যাকআপ এখানে আসবে। পুনরুদ্ধার করতে এখানে ব্যাকআপ পেস্ট করুন।"></textarea>
-    <div style="margin-top:8px">
-      <button class="btn" id="bRest">এই লেখা থেকে পুনরুদ্ধার</button>
-      <button class="btn g" id="bFile">ফাইল থেকে পুনরুদ্ধার</button>
-      <input type="file" id="fi" accept=".json,.txt" style="display:none">
-    </div>
-    <div id="bmsg" class="meta" style="margin-top:8px"></div>
-  </section>
-</main>
-<button class="fab" id="bAdd">+</button>
+<div id="e" class="p">
+<div class="bar"><button onclick="go('l')">‹</button></div>
+<div class="pad">
+<input id="et" placeholder="শিরোনাম">
+<textarea id="ex" rows="14" placeholder="বয়ান লিখুন..."></textarea>
+<button class="card" style="width:100%;border:0;font:inherit;font-size:18px" onclick="S()">সংরক্ষণ</button>
+<button id="dl" class="card r" style="width:100%;border:0;font:inherit;font-size:18px" onclick="X()">মুছুন</button>
+</div></div>
 
 <script>
-var K='bayan_data_v1',S='bayan_set_v1';
-function load(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
-function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));return true}catch(e){alert('সংরক্ষণ করা যায়নি');return false}}
-var items=load(K,[]),st=load(S,{fs:18,dark:false}),cur=null,editId=null;
-function $(i){return document.getElementById(i)}
-function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-function fmt(d){if(!d)return'';try{return new Date(d).toLocaleDateString('bn-BD',{year:'numeric',month:'long',day:'numeric'})}catch(e){return d}}
-
-function applyTheme(){document.body.classList.toggle('dark',!!st.dark);$('bDark').textContent=st.dark?'☀️':'🌙'}
-function show(id,title){
-  ['vList','vForm','vRead','vBk'].forEach(function(v){$(v).classList.toggle('on',v===id)});
-  $('bBack').style.display=id==='vList'?'none':'';
-  $('bBk').style.display=id==='vList'?'':'none';
-  $('bAdd').style.display=id==='vList'?'':'none';
-  $('ht').textContent=title||'বয়ান সংরক্ষণ';
-  window.scrollTo(0,0);
+let D=JSON.parse(localStorage.b||'[]'),cur=-1,fs=+localStorage.f||22;
+if(localStorage.n=='1')document.body.classList.add('n');
+const $=i=>document.getElementById(i);
+const bn=n=>String(n).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
+const sv=()=>localStorage.b=JSON.stringify(D);
+function go(id){document.querySelectorAll('.p').forEach(p=>p.classList.remove('on'));$(id).classList.add('on');if(id=='l')L()}
+function N(){document.body.classList.toggle('n');localStorage.n=document.body.classList.contains('n')?'1':'0'}
+function L(){
+ let q=$('q').value.trim(),h=$('list');h.innerHTML='';
+ $('cnt').textContent='মোট বয়ান: '+bn(D.length);
+ D.forEach((b,i)=>{
+  if(q&&!(b.t+b.x).includes(q))return;
+  let c=document.createElement('div');c.className='card';c.onclick=()=>O(i);
+  let t=document.createElement('b');t.textContent=b.t;
+  let p=document.createElement('p');p.textContent=b.x.slice(0,80);
+  let s=document.createElement('small');s.textContent=b.d;
+  c.append(t,p,s);h.append(c);
+ });
 }
-function go(id,title){history.pushState({v:id},'');show(id,title)}
-function home(){render();show('vList')}
-window.addEventListener('popstate',home);
-
-function cats(){var m={};items.forEach(function(i){if(i.cat)m[i.cat]=1});return Object.keys(m).sort()}
-function fillCats(){
-  var sel=$('cf'),v=sel.value;
-  sel.innerHTML='<option value="">সব বিষয়</option>'+cats().map(function(c){return'<option>'+esc(c)+'</option>'}).join('');
-  sel.value=v;
+function O(i){cur=i;$('vt').textContent=D[i].t;$('vx').textContent=D[i].x;$('vx').style.fontSize=fs+'px';go('v')}
+function F(n){fs=Math.max(14,Math.min(50,fs+n));localStorage.f=fs;$('vx').style.fontSize=fs+'px'}
+function E(i){cur=i;$('et').value=i<0?'':D[i].t;$('ex').value=i<0?'':D[i].x;$('dl').style.display=i<0?'none':'block';go('e')}
+function S(){
+ let t=$('et').value.trim(),x=$('ex').value.trim();
+ if(!t&&!x)return;
+ let d=new Date(),ds=bn(d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear());
+ if(cur<0)D.unshift({t,x,d:ds});else{D[cur].t=t;D[cur].x=x}
+ sv();go('l')
 }
-function render(){
-  fillCats();
-  var q=$('q').value.trim().toLowerCase(),c=$('cf').value;
-  var r=items.filter(function(i){
-    if(c&&i.cat!==c)return false;
-    return !q||(i.title+' '+i.speaker+' '+i.cat+' '+i.text).toLowerCase().indexOf(q)>-1;
-  }).sort(function(a,b){return b.id-a.id});
-  $('cnt').textContent='মোট '+r.length+' টি বয়ান';
-  $('list').innerHTML=r.length?r.map(function(i){
-    return'<div class="card" data-id="'+i.id+'"><h3>'+esc(i.title||'(শিরোনামহীন)')+'</h3><div class="meta">'
-      +(i.cat?'<span class="tag">'+esc(i.cat)+'</span>':'')+esc(i.speaker)+(i.speaker&&i.date?' • ':'')+fmt(i.date)
-      +'</div><div class="snip">'+esc(i.text)+'</div></div>';
-  }).join(''):'<div class="empty">কোনো বয়ান নেই।<br>নিচের + বাটনে চেপে নতুন বয়ান যোগ করুন।</div>';
-}
-$('list').onclick=function(e){var c=e.target.closest('.card');if(c)openRead(+c.dataset.id)};
-$('q').oninput=render;$('cf').onchange=render;
-
-function openRead(id){
-  cur=items.filter(function(i){return i.id===id})[0];if(!cur)return;
-  $('rT').textContent=cur.title;
-  $('rM').textContent=[cur.speaker,fmt(cur.date),cur.cat].filter(Boolean).join(' • ');
-  $('rt').textContent=cur.text;$('rt').style.fontSize=st.fs+'px';
-  go('vRead','পড়ুন');
-}
-function fs(d){st.fs=Math.max(12,Math.min(40,st.fs+d));save(S,st);$('rt').style.fontSize=st.fs+'px'}
-$('bPlus').onclick=function(){fs(2)};$('bMinus').onclick=function(){fs(-2)};
-
-function copyText(t,ok){
-  function fb(){var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');alert(ok)}catch(e){alert('কপি করা যায়নি')}a.remove()}
-  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){alert(ok)},fb);else fb();
-}
-$('bCopy').onclick=function(){copyText(cur.title+'\n\n'+cur.text,'কপি হয়েছে')};
-$('bShare').onclick=function(){
-  var t=cur.title+'\n\n'+cur.text;
-  if(navigator.share)navigator.share({title:cur.title,text:t}).catch(function(){});else copyText(t,'শেয়ার সমর্থিত নয়, লেখা কপি হয়েছে');
-};
-$('bDel').onclick=function(){
-  if(!confirm('এই বয়ান মুছে ফেলবেন?'))return;
-  items=items.filter(function(i){return i.id!==cur.id});save(K,items);history.back();
-};
-
-function openForm(it){
-  editId=it?it.id:null;
-  $('fT').value=it?it.title:'';$('fS').value=it?it.speaker:'';
-  $('fD').value=it?it.date:new Date().toISOString().slice(0,10);
-  $('fC').value=it?it.cat:'';$('fX').value=it?it.text:'';
-  go('vForm',it?'সম্পাদনা':'নতুন বয়ান');
-}
-$('bAdd').onclick=function(){openForm(null)};
-$('bEdit').onclick=function(){openForm(cur)};
-$('bCancel').onclick=function(){history.back()};
-$('bSave').onclick=function(){
-  var t=$('fT').value.trim(),x=$('fX').value;
-  if(!t){alert('শিরোনাম লিখুন');return}
-  var o={id:editId||Date.now(),title:t,speaker:$('fS').value.trim(),date:$('fD').value,cat:$('fC').value.trim(),text:x};
-  if(editId)items=items.map(function(i){return i.id===editId?o:i});else items.push(o);
-  if(save(K,items))history.back();
-};
-
-$('bBk').onclick=function(){$('bk').value='';$('bmsg').textContent='';go('vBk','ব্যাকআপ')};
-function makeBk(){return JSON.stringify({app:'bayan',v:1,items:items})}
-$('bMake').onclick=function(){$('bk').value=makeBk();$('bmsg').textContent=items.length+' টি বয়ানের ব্যাকআপ তৈরি হয়েছে। কপি করে নিরাপদ জায়গায় রাখুন।'};
-$('bCpB').onclick=function(){if(!$('bk').value)$('bk').value=makeBk();copyText($('bk').value,'ব্যাকআপ কপি হয়েছে')};
-$('bDl').onclick=function(){
-  try{
-    var b=new Blob([makeBk()],{type:'application/json'}),a=document.createElement('a');
-    a.href=URL.createObjectURL(b);a.download='bayan-backup-'+new Date().toISOString().slice(0,10)+'.json';
-    document.body.appendChild(a);a.click();a.remove();
-    $('bmsg').textContent='ডাউনলোড না হলে "ব্যাকআপ তৈরি করুন" চেপে লেখা কপি করে রাখুন।';
-  }catch(e){$('bmsg').textContent='ডাউনলোড সমর্থিত নয়, কপি করে রাখুন।'}
-};
-function restore(txt){
-  try{
-    var d=JSON.parse(txt),arr=d.items||d,n=0;
-    if(!Array.isArray(arr))throw 0;
-    var ids={};items.forEach(function(i){ids[i.id]=1});
-    arr.forEach(function(i){if(i&&i.title!==undefined&&!ids[i.id]){items.push(i);ids[i.id]=1;n++}});
-    save(K,items);$('bmsg').textContent=n+' টি নতুন বয়ান যোগ হয়েছে।';
-  }catch(e){$('bmsg').textContent='ব্যাকআপ পড়া যায়নি। সঠিক লেখা দিন।'}
-}
-$('bRest').onclick=function(){restore($('bk').value)};
-$('bFile').onclick=function(){$('fi').click()};
-$('fi').onchange=function(){
-  var f=this.files[0];if(!f)return;
-  var r=new FileReader();r.onload=function(){restore(r.result)};r.readAsText(f);
-};
-
-$('bBack').onclick=function(){history.back()};
-$('bDark').onclick=function(){st.dark=!st.dark;save(S,st);applyTheme()};
-applyTheme();render();
-</script>
-</body>
-</html>
+function X(){if(confirm('এই বয়ানটি মুছে ফেলবেন?')){D.splice(cur,1);sv();go('l')}}
+L();
+</script></body></html>
