@@ -1,61 +1,98 @@
-<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light">
-<style>html{color-scheme:light}body{font-family:sans-serif;margin:10px;background:#fff;color:#000}textarea,input,select{background:#fff;color:#000;border:1px solid #888;box-sizing:border-box}textarea{width:100%;height:150px;font-size:16px}button,select{padding:10px;margin:4px 0;font-size:16px;width:100%;background:#eee;color:#000;border:1px solid #888}.i{border:1px solid #ccc;padding:6px;margin:4px 0}.tb{width:49%;background:#ddd}</style></head><body>
-<h3>পিডিএফ বানান</h3>
-<button class="tb" onclick="tab(1)">লেখা থেকে PDF</button><button class="tb" onclick="tab(2)">ছবি থেকে PDF</button>
-<input id="n" placeholder="ফাইলের নাম" style="width:100%;font-size:16px;padding:6px">
-<div id="b1"><textarea id="t" placeholder="বাংলা/আরবি লেখা পেস্ট করুন"></textarea>
-<button onclick="addT()">আরও লেখা যোগ করুন (নতুন অধ্যায়)</button></div>
-<div id="b2" style="display:none"><input type="file" id="f" accept="image/*" multiple hidden onchange="addI(this.files)">
-<button onclick="f.click()">ছবি যোগ করুন</button>
-<select id="m"><option value="b">সাদা-কালো (সবচেয়ে ছোট সাইজ)</option><option value="c">রঙিন</option></select>
-<select id="mo"><option value="i">পাতা = ছবির মাপ</option><option value="a">সব পাতা A4</option></select></div>
-<div id="l"></div>
-<button id="b" onclick="mk()" style="background:#0a7;color:#fff">PDF বানান</button>
+<!DOCTYPE html>
+<html lang="bn"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>বয়ান সংরক্ষণ</title>
+<style>
+:root{--bg:#121212;--card:#1e1e1e;--tx:#eee;--sub:#999;--g:#14301a;--gold:#c9a227;--ttl:#6cc57c}
+body.light{--bg:#f4f1e8;--card:#fff;--tx:#222;--sub:#666;--ttl:#1b6b2c}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--tx);font-family:sans-serif}
+.page{display:none;height:100%;flex-direction:column}
+.page.on{display:flex}
+.scroll{flex:1;overflow-y:auto;padding:14px}
+.head{background:var(--g);color:#fff;text-align:center;padding:20px 16px;border-radius:0 0 30px 30px}
+.head .bis{color:#f3d27a;font-size:clamp(18px,6vw,28px);white-space:nowrap;line-height:1.6}
+.head h1{font-size:34px;margin:8px 0}
+.head input{width:100%;padding:14px;border-radius:25px;border:1px solid #ccc;background:#1a1a1a;color:#fff;font-size:16px;margin-top:12px}
+.card{background:var(--card);border-radius:18px;padding:16px;margin-bottom:14px;border-right:6px solid var(--gold)}
+.card h3{color:var(--ttl);font-size:24px;margin-bottom:6px}
+.card p{color:var(--sub);line-height:1.8;max-height:3.6em;overflow:hidden}
+.card small{color:var(--sub)}
+.fab{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--gold);color:#fff;border:0;border-radius:30px;padding:16px 28px;font-size:20px;white-space:nowrap}
+.bar{display:flex;gap:6px;padding:10px;background:var(--g);flex-shrink:0}
+.bar button{flex:1;padding:12px 2px;border:0;border-radius:12px;background:#fff;color:#14301a;font-size:14px;font-weight:bold;white-space:nowrap}
+#body{white-space:pre-wrap;line-height:2.1}
+#ttl{color:var(--ttl);font-size:28px}
+.box{background:var(--card);border-radius:16px;padding:16px;margin-bottom:12px}
+.edit input,.edit textarea{width:100%;padding:12px;border-radius:12px;border:1px solid #888;background:var(--card);color:var(--tx);font-size:17px;margin-bottom:10px;font-family:inherit}
+.edit textarea{height:55vh}
+.delbtn{width:100%;padding:12px;border:0;border-radius:12px;background:#b33;color:#fff;font-size:16px}
+</style></head><body>
+
+<div id="p1" class="page on">
+ <div class="head"><div class="bis">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>
+ <h1>বয়ান সংরক্ষণ</h1><div>আপনার বয়ানের ব্যক্তিগত সংগ্রহ</div>
+ <input id="q" placeholder="বয়ান খুঁজুন..." oninput="list()"></div>
+ <div class="scroll"><p id="cnt" style="margin-bottom:12px"></p><div id="list"></div><div style="height:90px"></div></div>
+ <button class="fab" onclick="openEdit(-1)">+ নতুন বয়ান</button>
+</div>
+
+<div id="p2" class="page">
+ <div class="bar">
+  <button onclick="show('p1')">ফিরে যান</button>
+  <button onclick="fs(-2)">অ-</button>
+  <button onclick="fs(2)">অ+</button>
+  <button onclick="openEdit(cur)">সম্পাদনা</button>
+  <button onclick="theme()">ডার্কমোড</button>
+ </div>
+ <div class="scroll">
+  <div class="box"><h2 id="ttl"></h2></div>
+  <div class="box"><div id="body"></div></div>
+ </div>
+</div>
+
+<div id="p3" class="page edit">
+ <div class="bar">
+  <button onclick="show(cur<0?'p1':'p2')">ফিরে যান</button>
+  <button onclick="save()">সংরক্ষণ</button>
+  <button onclick="theme()">ডার্কমোড</button>
+ </div>
+ <div class="scroll">
+  <input id="et" placeholder="শিরোনাম">
+  <textarea id="eb" placeholder="বয়ান লিখুন..."></textarea>
+  <button id="db" class="delbtn" onclick="del()">মুছে ফেলুন</button>
+ </div>
+</div>
+
 <script>
-const W=1000,H=1414;let L=[];
-function tab(k){b1.style.display=k==1?'':'none';b2.style.display=k==2?'':'none';L=[];show()}
-function show(){l.innerHTML=L.map((x,i)=>`<div class=i>${i+1}. ${x.t?x.t.slice(0,40):'ছবি'} <a href="#" onclick="L.splice(${i},1);show()">❌</a></div>`).join('')}
-function addT(){if(t.value.trim()){L.push({t:t.value});t.value='';show()}}
-async function addI(fs){for(let x of [...fs]){await new Promise(o=>{let r=new FileReader();r.onload=()=>{L.push({s:r.result});show();o()};r.readAsDataURL(x)})}f.value=''}
-function bits(c){let w=c.width,h=c.height,d=c.getContext('2d').getImageData(0,0,w,h).data,r=(w+7)>>3,o=new Uint8Array(r*h);
-for(let y=0;y<h;y++)for(let x=0;x<w;x++)if(d[(y*w+x)*4+1]>160)o[y*r+(x>>3)]|=128>>(x&7);return o}
-async function dfl(u){return new Uint8Array(await new Response(new Blob([u]).stream().pipeThrough(new CompressionStream('deflate'))).arrayBuffer())}
-function tp(txt){let P=[],c,g,y,rt;
-function fin(){if(c)P.push({d:bits(c),w:W,h:H,pw:595,ph:842})}
-function nw(){fin();c=document.createElement('canvas');c.width=W;c.height=H;g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,W,H);g.fillStyle='#000';g.font='30px sans-serif';y=80}
-function out(s){if(y>H-70)nw();g.direction=rt?'rtl':'ltr';g.textAlign=rt?'right':'left';g.fillText(s,rt?W-70:70,y);y+=50}
-nw();
-for(let p of txt.split('\n')){rt=/[\u0600-\u06FF]/.test(p);g.direction=rt?'rtl':'ltr';let ln='';for(let s of p.split(' ')){let zz=ln+s+' ';if(g.measureText(zz).width>W-140){out(ln);ln=s+' '}else ln=zz}out(ln)}
-fin();return P}
-function ip(src){return new Promise(r=>{let im=new Image();im.onload=()=>{let a4=mo.value=='a',k=Math.min(1,1000/im.width),cw=a4?W:Math.round(im.width*k),ch=a4?H:Math.round(im.height*k),c=document.createElement('canvas'),g;
-c.width=cw;c.height=ch;g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,cw,ch);
-let s=Math.min(cw/im.width,ch/im.height);g.drawImage(im,(cw-im.width*s)/2,(ch-im.height*s)/2,im.width*s,im.height*s);
-let p={w:cw,h:ch,pw:595,ph:a4?842:Math.round(595*ch/cw)};
-if(m.value=='b')p.d=bits(c);else{p.j=1;p.d=Uint8Array.from(atob(c.toDataURL('image/jpeg',.6).split(',')[1]),x=>x.charCodeAt(0))}
-r(p)};im.src=src})}
-function pdf(P){let A=[],pos=0,off=[],en=new TextEncoder();
-const add=x=>{if(typeof x=='string')x=en.encode(x);A.push(x);pos+=x.length};
-const ob=(i,s,bin)=>{off[i]=pos;add(i+' 0 obj\n'+s);if(bin){add('stream\n');add(bin);add('\nendstream')}add('\nendobj\n')};
-add('%PDF-1.4\n');
-ob(1,'<</Type/Catalog/Pages 2 0 R>>');
-ob(2,`<</Type/Pages/Count ${P.length}/Kids[${P.map((_,k)=>(3+3*k)+' 0 R').join(' ')}]>>`);
-P.forEach((p,k)=>{let a=3+3*k,cn=`q ${p.pw} 0 0 ${p.ph} 0 0 cm /I Do Q`;
-ob(a,`<</Type/Page/Parent 2 0 R/MediaBox[0 0 ${p.pw} ${p.ph}]/Contents ${a+1} 0 R/Resources<</XObject<</I ${a+2} 0 R>>>>>>`);
-ob(a+1,`<</Length ${cn.length}>>\n`,en.encode(cn));
-ob(a+2,`<</Type/XObject/Subtype/Image/Width ${p.w}/Height ${p.h}/ColorSpace/${p.j?'DeviceRGB':'DeviceGray'}/BitsPerComponent ${p.j?8:1}/Filter/${p.j?'DCTDecode':'FlateDecode'}/Length ${p.d.length}>>\n`,p.d)});
-let xp=pos,n=3*P.length+3;
-add('xref\n0 '+n+'\n0000000000 65535 f \n');
-for(let i=1;i<n;i++)add(String(off[i]).padStart(10,'0')+' 00000 n \n');
-add(`trailer\n<</Size ${n}/Root 1 0 R>>\nstartxref\n${xp}\n%%EOF`);
-return new Blob(A,{type:'application/pdf'})}
-async function mk(){if(b1.style.display!='none'&&t.value.trim())addT();
-if(!L.length)return alert('আগে কিছু যোগ করুন');
-if(!window.CompressionStream)return alert('Android System WebView আপডেট করুন');
-b.disabled=true;b.textContent='অপেক্ষা করুন...';
-let P=[];for(let x of L){if(x.t)P.push(...tp(x.t));else P.push(await ip(x.s))}
-for(let p of P)if(!p.j)p.d=await dfl(p.d);
-let bl=pdf(P),nm=(n.value||'book')+'.pdf',r=new FileReader();
-r.onload=async()=>{try{await Capacitor.Plugins.Filesystem.writeFile({path:'PDF/'+nm,data:r.result.split(',')[1],directory:'DOCUMENTS',recursive:true});alert('Documents/PDF ফোল্ডারে সেভ হয়েছে ('+Math.round(bl.size/1024)+' KB)')}catch(e){let a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download=nm;a.click()}
-b.disabled=false;b.textContent='PDF বানান'};
-r.readAsDataURL(bl)}
-</script></body></html>
+var D=JSON.parse(localStorage.bayans||'[]'),cur=-1,size=+localStorage.size||19;
+if(localStorage.light)document.body.classList.add('light');
+var bn=function(n){return String(n).replace(/\d/g,function(d){return '০১২৩৪৫৬৭৮৯'[d]})};
+function $(i){return document.getElementById(i)}
+function show(id){document.querySelectorAll('.page').forEach(function(p){p.classList.remove('on')});$(id).classList.add('on')}
+function store(){localStorage.bayans=JSON.stringify(D)}
+function list(){
+ var k=$('q').value.trim(),h='';
+ D.forEach(function(b,i){
+  if(k&&(b.t+b.b).indexOf(k)<0)return;
+  h+='<div class="card" onclick="view('+i+')"><h3>'+esc(b.t)+'</h3><p>'+esc(b.b.slice(0,120))+'</p><small>'+bn(b.d)+'</small></div>';
+ });
+ $('list').innerHTML=h;$('cnt').textContent='মোট বয়ান: '+bn(D.length);
+}
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function view(i){cur=i;$('ttl').textContent=D[i].t;$('body').textContent=D[i].b;$('body').style.fontSize=size+'px';show('p2')}
+function fs(n){size=Math.max(12,Math.min(40,size+n));localStorage.size=size;$('body').style.fontSize=size+'px'}
+function theme(){document.body.classList.toggle('light');localStorage.light=document.body.classList.contains('light')?1:''}
+function openEdit(i){cur=i;$('et').value=i<0?'':D[i].t;$('eb').value=i<0?'':D[i].b;$('db').style.display=i<0?'none':'block';show('p3')}
+function save(){
+ var t=$('et').value.trim(),b=$('eb').value;
+ if(!t)return alert('শিরোনাম লিখুন');
+ if(cur<0){var n=new Date();D.unshift({t:t,b:b,d:n.getDate()+'/'+(n.getMonth()+1)+'/'+n.getFullYear()});cur=-1;store();list();show('p1')}
+ else{D[cur].t=t;D[cur].b=b;store();list();view(cur)}
+}
+function del(){if(confirm('মুছে ফেলবেন?')){D.splice(cur,1);store();list();show('p1')}}
+list();
+</script>
+</body></html>
