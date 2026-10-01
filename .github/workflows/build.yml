@@ -26,15 +26,26 @@ jobs:
           cp index.html www/index.html
           cp *.ttf www/ || true
 
+      - name: Make icon
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y librsvg2-bin
+          mkdir -p ~/.fonts assets
+          cp *.ttf ~/.fonts/
+          fc-cache -f
+          rsvg-convert -w 1024 -h 1024 icon.svg -o assets/icon-only.png
+
       - name: Install Capacitor
         run: |
           npm init -y
           npm install @capacitor/core@6 @capacitor/cli@6 @capacitor/android@6
+          npm install @capacitor/assets
 
       - name: Create Android project
         run: |
           npx cap init "বয়ান সংরক্ষণ" com.bayan.app --web-dir www
           npx cap add android
+          npx capacitor-assets generate --android --iconBackgroundColor '#14301a' --iconBackgroundColorDark '#14301a'
           npx cap sync android
 
       - name: Build debug APK
