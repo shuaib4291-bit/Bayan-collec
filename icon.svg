@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+<rect width="1024" height="1024" fill="#14301a"/>
+<path d="M265 300V625C350 605 440 605 512 650C584 605 674 605 759 625V300Z" fill="#c9a227"/>
+<path d="M512 330C440 290 360 290 290 310V600C360 580 440 580 512 620Z" fill="#f5efd9"/>
+<path d="M512 330C584 290 664 290 734 310V600C664 580 584 580 512 620Z" fill="#fff8e1"/>
+<g stroke="#c9a227" stroke-width="10" stroke-linecap="round">
+<path d="M325 380H470M325 425H470M325 470H470M325 515H470"/>
+<path d="M554 380H699M554 425H699M554 470H699M554 515H699"/>
+</g>
+<text x="512" y="790" text-anchor="middle" font-size="120" fill="#f3d27a" font-family="SolaimanLipi">বয়ান সংগ্রহ</text>
+</svg>
